@@ -15,23 +15,37 @@ func main() {
 	var choice uint
 	userProfiles := make(map[string]userAccount)
 
-	fmt.Println("Want to register or login?")
-	fmt.Printf("print 1 to register and 2 to login: ")
-	fmt.Scan(&choice)
+	var currentAccount userAccount
 
-	switch choice {
-		case(1): {
-			userRegister(&userProfiles)
+	for {
+		for currentAccount == (userAccount{}) {
+			fmt.Println("Want to register or login?")
+			fmt.Printf("print 1 to register and 2 to login: ")
+			fmt.Scan(&choice)
+		
+			switch choice {
+				case(1): {
+					userRegister(&userProfiles, &currentAccount)
+				}
+				case(2): {
+					fmt.Println("You select login")
+				}
+			}
 		}
-		case(2): {
-			fmt.Println("You select login")
+	
+	
+		switch showMenu() {
+			case(3): {
+				currentAccount = userAccount{}
+			}
+			case(4): {
+				return
+			}
 		}
 	}
-
-	fmt.Println(userProfiles)
 }
 
-func userRegister(userProfiles *map[string]userAccount) {
+func userRegister(userProfiles *map[string]userAccount, currentAccount *userAccount) {
 	var newUserAccount userAccount
 	var nickname string
 	var password string
@@ -70,5 +84,16 @@ func userRegister(userProfiles *map[string]userAccount) {
 	newUserAccount.password = password
 	newUserAccount.email = email
 	newUserAccount.age = age
+
+	*currentAccount = newUserAccount
 	(*userProfiles)[nickname] = newUserAccount
+}
+
+func showMenu() uint {
+	var choice uint
+	fmt.Println("Menu of actions:")
+	fmt.Printf("To exit from account print 3\n")
+	fmt.Printf("To exit from program print 4\n")
+	fmt.Scan(&choice)
+	return choice
 }
